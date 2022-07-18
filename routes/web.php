@@ -26,3 +26,7 @@ Route::middleware('auth')
     ->group(function(){
         Route::get('/home', 'HomeController@index')->name('home');
     });
+//FRONT OFFICE
+Route::any('{any?}', function(){
+   return view('guest.home'); 
+})->where('any', '.*');
