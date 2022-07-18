@@ -1,0 +1,13 @@
+- installo lo scaffolding composer require laravel/ui:^2.4
+
+- php artisan ui vue --auth
+
+- npm install
+
+- npm run dev
+
+- collego il database e metto la password nel .env
+
+- php artisan migrate
+
+- php artisan serve
