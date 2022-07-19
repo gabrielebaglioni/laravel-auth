@@ -7,7 +7,7 @@
             <h1>{{$post->title}}</h1>
         </div>
         <div class="card-body">
-            <div>
+            <div style="padding: 10px;">
                {{$post->content}}
             </div>
             <div class="mb-3">
