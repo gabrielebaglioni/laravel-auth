@@ -37,12 +37,22 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // validazione
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string|max:65535',
+            'published' => 'sometimes|accepted'
+        ]);
+        // prendo i dati dalla request e creo il post
         $data = $request->all();
         $newPost = new Post();
         $newPost->fill($data);
-        $newPost->slug = Str::of($newPost->title)->slug('-');
-        $newPost->published = isset($newPost->published) ;
+
+        $newPost->slug = $this->getSlug($data['title']);
+
+        $newPost->published = isset($data['published']); // true o false
         $newPost->save();
+        // redirect alla pagina del post appena creato
         return redirect()->route('admin.posts.show', $newPost->id);
     }
 
@@ -52,9 +62,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('admin.posts.show', compact('post'));
     }
 
     /**
@@ -90,4 +100,18 @@ class PostController extends Controller
     {
         //
     }
+    private function getSlug($title)
+    {
+        $slug = Str::of($title)->slug('-');
+        $count = 1;
+
+        while( Post::where('slug', $slug)->first() ) {
+            $slug = Str::of($title)->slug('-') . "-{$count}";
+            $count++;
+        }
+
+        return $slug;
+    }
 }
+
+
